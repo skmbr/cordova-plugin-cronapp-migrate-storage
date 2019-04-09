@@ -25,6 +25,7 @@
 #define ORIG_LS_DIRPATH @"WebKit/LocalStorage/"
 #define ORIG_LS_CACHE_DIRPATH @"Caches/"
 #define TARGET_LS_DIRPATH @"WebKit/WebsiteData/LocalStorage/"
+#define TARGET_LS_DIRPATH_BUNDLE @"WebKit/%@/WebsiteData/LocalStorage/"
 
 #define ORIG_IDB_DIRPATH @"WebKit/LocalStorage/___IndexedDB/"
 #define TARGET_IDB_DIRPATH @"WebKit/WebsiteData/IndexedDB/"
@@ -37,8 +38,9 @@
 #define DEFAULT_HOSTNAME @"http_localhost_"
 
 @interface MigrateStorage ()
-    @property (nonatomic, assign) NSString *portNumber;
-    @property (nonatomic, assign) NSString *hostname;
+@property (nonatomic, assign) NSString *portNumber;
+@property (nonatomic, assign) NSString *hostname;
+@property (nonatomic, assign) NSString *bundleId;
 @end
 
 @implementation MigrateStorage
@@ -217,7 +219,7 @@
     
     // Use the file in the cache if not found in original path
     NSString *original = [[NSFileManager defaultManager] fileExistsAtPath:originalLSFilePath] ? originalLSFilePath : originalLSCachePath;
-    NSString *target = [[appLibraryFolder stringByAppendingPathComponent:TARGET_LS_DIRPATH] stringByAppendingPathComponent:targetLSFileName];
+    NSString *target = [[appLibraryFolder stringByAppendingPathComponent:[NSString stringWithFormat: TARGET_LS_DIRPATH_BUNDLE, self.bundleId]] stringByAppendingPathComponent:targetLSFileName];
     
     logDebug(@"%@ LS original %@", TAG, original);
     logDebug(@"%@ LS target %@", TAG, target);
@@ -274,22 +276,25 @@
     
     NSDictionary *cdvSettings = self.commandDelegate.settings;
     self.portNumber = [cdvSettings cordovaSettingForKey:CDV_SETTING_PORT_NUMBER];
-    self.hostname = [cdvSettings cordovaSettingForKey:CDV_SETTING_HOSTNAME];
+    NSString *hostname = [cdvSettings cordovaSettingForKey:CDV_SETTING_HOSTNAME];
+    NSBundle* bundle = [NSBundle mainBundle];
+    self.bundleId = [bundle bundleIdentifier];
     
     if([self.portNumber length] == 0) {
         self.portNumber = DEFAULT_PORT_NUMBER;
     }
-
-    if([self.hostname length] == 0) {
-        self.hostname = DEFAULT_HOSTNAME;
+    
+    if([hostname length] == 0) {
+        hostname = DEFAULT_HOSTNAME;
     } else {
-        self.hostname = [@"ionic_" stringByAppendingString:self.hostname];
-        self.portNumber = @"_0"
+        hostname = [@"ionic_" stringByAppendingString:hostname];
+        self.portNumber = @"_0";
     }
-
-    [self migrateWebSQL];
+    self.hostname = hostname;
+    
+    // [self migrateWebSQL];
     [self migrateLocalStorage];
-    [self migrateIndexedDB];
+    // [self migrateIndexedDB];
     
     logDebug(@"%@ end pluginInitialize()", TAG);
 }
