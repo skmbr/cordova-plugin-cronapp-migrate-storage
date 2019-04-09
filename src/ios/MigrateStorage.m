@@ -32,17 +32,20 @@
 #define UI_WEBVIEW_PROTOCOL_DIR @"file__0"
 
 #define CDV_SETTING_PORT_NUMBER @"WKPort"
+#define CDV_SETTING_HOSTNAME @"Hostname"
 #define DEFAULT_PORT_NUMBER @"8080"
+#define DEFAULT_HOSTNAME @"http_localhost_"
 
 @interface MigrateStorage ()
     @property (nonatomic, assign) NSString *portNumber;
+    @property (nonatomic, assign) NSString *hostname;
 @end
 
 @implementation MigrateStorage
 
 - (NSString*)getWkWebviewProtocolDir
 {
-    return [@"http_localhost_" stringByAppendingString:self.portNumber];
+    return [self.hostname stringByAppendingString:self.portNumber];
 }
 
 - (BOOL)moveFile:(NSString*)src to:(NSString*)dest
@@ -271,11 +274,19 @@
     
     NSDictionary *cdvSettings = self.commandDelegate.settings;
     self.portNumber = [cdvSettings cordovaSettingForKey:CDV_SETTING_PORT_NUMBER];
+    self.hostname = [cdvSettings cordovaSettingForKey:CDV_SETTING_HOSTNAME];
     
     if([self.portNumber length] == 0) {
         self.portNumber = DEFAULT_PORT_NUMBER;
     }
-    
+
+    if([self.hostname length] == 0) {
+        self.hostname = DEFAULT_HOSTNAME;
+    } else {
+        self.hostname = [@"ionic_" stringByAppendingString:self.hostname];
+        self.portNumber = @"_0"
+    }
+
     [self migrateWebSQL];
     [self migrateLocalStorage];
     [self migrateIndexedDB];
