@@ -79,7 +79,11 @@ public class MigrateStorage extends CordovaPlugin {
     }
 
     private String getLocalHostProtocol() {
-        return "http://localhost:" + this.portNumber;
+        if (this.portNumber != "0") {
+            return "http://localhost:" + this.portNumber;
+        } else {
+            return "http://localhost";
+        }
     }
 
     private String getRootPath() {
