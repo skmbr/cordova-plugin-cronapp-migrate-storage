@@ -124,6 +124,61 @@ public class MigrateStorage extends CordovaPlugin {
         if (fileLocalStorage.exists()) {
             fileLocalStorage.renameTo(ionicLocalStorage);
             hasMigratedData = true;
+        } else {
+            this.logDebug("migrateLocalStorage: Migrating localStorage from leveldb..");
+
+            String levelDbPath = this.getLocalStorageRootPath() + "/leveldb";
+            this.logDebug("migrateLocalStorage: levelDbPath: " + levelDbPath);
+    
+            File levelDbDir = new File(levelDbPath);
+            if(!levelDbDir.isDirectory() || !levelDbDir.exists()) {
+                this.logDebug("migrateLocalStorage: '" + levelDbPath + "' is not a directory or was not found; Exiting");
+                return;
+            }
+    
+            LevelDB db = new LevelDB(levelDbPath);
+    
+            String localHostProtocol = this.getLocalHostProtocol();
+    
+            if(db.exists(Utils.stringToBytes("META:" + localHostProtocol))) {
+                this.logDebug("migrateLocalStorage: Found 'META:" + localHostProtocol + "' key; Skipping migration");
+                db.close();
+                return;
+            }
+    
+            // Yes, there is a typo here; `newInterator` 😔
+            LevelIterator iterator = db.newInterator();
+    
+            // To update in bulk!
+            WriteBatch batch = new WriteBatch();
+    
+    
+            // 🔃 Loop through the keys and replace `file://` with `http://localhost:{portNumber}`
+            logDebug("migrateLocalStorage: Starting replacements;");
+            for(iterator.seekToFirst(); iterator.isValid(); iterator.next()) {
+                String key = Utils.bytesToString(iterator.key());
+                byte[] value = iterator.value();
+    
+                if (key.contains(FILE_PROTOCOL)) {
+                    String newKey = key.replace(FILE_PROTOCOL, localHostProtocol);
+    
+                    logDebug("migrateLocalStorage: Changing key:" + key + " to '" + newKey + "'");
+    
+                    // Add new key to db
+                    batch.putBytes(Utils.stringToBytes(newKey), value);
+                    hasMigratedData = true;
+                } else {
+                    logDebug("migrateLocalStorage: Skipping key:" + key);
+                }
+            }
+    
+            // Commit batch to DB
+            db.write(batch);
+    
+            iterator.close();
+            db.close();
+    
+            this.logDebug("migrateLocalStorage: Successfully migrated localStorage..");            
         }
 
         if (fileLocalStorageJournal.exists()) {
