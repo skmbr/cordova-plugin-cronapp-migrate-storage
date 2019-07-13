@@ -216,13 +216,16 @@
     
     NSString *originalLSFilePath = [[appLibraryFolder stringByAppendingPathComponent:ORIG_LS_DIRPATH] stringByAppendingPathComponent:originalLSFileName];
     NSString *originalLSCachePath = [[appLibraryFolder stringByAppendingPathComponent:ORIG_LS_CACHE_DIRPATH] stringByAppendingPathComponent:originalLSFileName];
+    
 
+    NSString *targetPath = [appLibraryFolder stringByAppendingPathComponent:TARGET_LS_DIRPATH];
+    NSString *targetBundlePath = [appLibraryFolder stringByAppendingPathComponent:[NSString stringWithFormat: TARGET_LS_DIRPATH_BUNDLE, self.bundleId]];
     NSString *targetLSStoragePath = [[appLibraryFolder stringByAppendingPathComponent:TARGET_LS_DIRPATH] stringByAppendingPathComponent:targetLSFileName];
     NSString *targetLSStorageBundlePath = [[appLibraryFolder stringByAppendingPathComponent:[NSString stringWithFormat: TARGET_LS_DIRPATH_BUNDLE, self.bundleId]] stringByAppendingPathComponent:targetLSFileName];
     
     // Use the file in the cache if not found in original path
     NSString *original = [[NSFileManager defaultManager] fileExistsAtPath:originalLSFilePath] ? originalLSFilePath : originalLSCachePath;
-    NSString *target = [[NSFileManager defaultManager] fileExistsAtPath:targetLSStoragePath] ? targetLSStoragePath : targetLSStorageBundlePath;
+    NSString *target = [[NSFileManager defaultManager] fileExistsAtPath:targetPath] && ![[NSFileManager defaultManager] fileExistsAtPath:targetBundlePath] ? targetLSStoragePath : targetLSStorageBundlePath;
     BOOL recoveryMigrationError = [[NSFileManager defaultManager] fileExistsAtPath:targetLSStorageBundlePath] && [[NSFileManager defaultManager] fileExistsAtPath:targetLSStoragePath];
     
     logDebug(@"%@ LS original %@", TAG, original);
@@ -243,7 +246,7 @@
             BOOL success1 = [self moveFile:targetLSStoragePath to:[targetLSStoragePath stringByAppendingString:@"-bad"]];
             BOOL success2 = [self moveFile:[targetLSStoragePath stringByAppendingString:@"-shm"] to:[targetLSStoragePath stringByAppendingString:@"-shm-bad"]];
             BOOL success3 = [self moveFile:[targetLSStoragePath stringByAppendingString:@"-wal"] to:[targetLSStoragePath stringByAppendingString:@"-wal-bad"]];
-
+            
             BOOL success4 = [self moveFile:targetLSStorageBundlePath to:targetLSStoragePath];
             BOOL success5 = [self moveFile:[targetLSStorageBundlePath stringByAppendingString:@"-shm"] to:[targetLSStoragePath stringByAppendingString:@"-shm"]];
             BOOL success6 = [self moveFile:[targetLSStorageBundlePath stringByAppendingString:@"-wal"] to:[targetLSStoragePath stringByAppendingString:@"-wal"]];
