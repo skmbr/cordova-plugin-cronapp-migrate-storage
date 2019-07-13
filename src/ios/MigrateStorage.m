@@ -216,10 +216,14 @@
     
     NSString *originalLSFilePath = [[appLibraryFolder stringByAppendingPathComponent:ORIG_LS_DIRPATH] stringByAppendingPathComponent:originalLSFileName];
     NSString *originalLSCachePath = [[appLibraryFolder stringByAppendingPathComponent:ORIG_LS_CACHE_DIRPATH] stringByAppendingPathComponent:originalLSFileName];
+
+    NSString *targetLSStoragePath = [[appLibraryFolder stringByAppendingPathComponent:TARGET_LS_DIRPATH] stringByAppendingPathComponent:targetLSFileName];
+    NSString *targetLSStorageBundlePath = [[appLibraryFolder stringByAppendingPathComponent:[NSString stringWithFormat: TARGET_LS_DIRPATH_BUNDLE, self.bundleId]] stringByAppendingPathComponent:targetLSFileName];
     
     // Use the file in the cache if not found in original path
     NSString *original = [[NSFileManager defaultManager] fileExistsAtPath:originalLSFilePath] ? originalLSFilePath : originalLSCachePath;
-    NSString *target = [[appLibraryFolder stringByAppendingPathComponent:[NSString stringWithFormat: TARGET_LS_DIRPATH_BUNDLE, self.bundleId]] stringByAppendingPathComponent:targetLSFileName];
+    NSString *target = [[NSFileManager defaultManager] fileExistsAtPath:targetLSStoragePath] ? targetLSStoragePath : targetLSStorageBundlePath;
+    BOOL recoveryMigrationError = [[NSFileManager defaultManager] fileExistsAtPath:targetLSStorageBundlePath] && [[NSFileManager defaultManager] fileExistsAtPath:targetLSStoragePath];
     
     logDebug(@"%@ LS original %@", TAG, original);
     logDebug(@"%@ LS target %@", TAG, target);
@@ -234,8 +238,21 @@
         success = success1 && success2 && success3;
     }
     else {
-        logDebug(@"%@ found LS data. not migrating", TAG);
-        success = NO;
+        if (recoveryMigrationError) {
+            logDebug(@"%@ Recovery action existing localstorage data found for WKWebView in bundle. Migrating data to non bundle WKWebView", TAG);
+            BOOL success1 = [self moveFile:targetLSStoragePath to:[targetLSStoragePath stringByAppendingString:@"-bad"]];
+            BOOL success2 = [self moveFile:[targetLSStoragePath stringByAppendingString:@"-shm"] to:[targetLSStoragePath stringByAppendingString:@"-shm-bad"]];
+            BOOL success3 = [self moveFile:[targetLSStoragePath stringByAppendingString:@"-wal"] to:[targetLSStoragePath stringByAppendingString:@"-wal-bad"]];
+
+            BOOL success4 = [self moveFile:targetLSStorageBundlePath to:targetLSStoragePath];
+            BOOL success5 = [self moveFile:[targetLSStorageBundlePath stringByAppendingString:@"-shm"] to:[targetLSStoragePath stringByAppendingString:@"-shm"]];
+            BOOL success6 = [self moveFile:[targetLSStorageBundlePath stringByAppendingString:@"-wal"] to:[targetLSStoragePath stringByAppendingString:@"-wal"]];
+            logDebug(@"%@ copy status %d %d %d %d %d %d", TAG, success1, success2, success3, success4, success5, success6);
+            success = success1 && success2 && success3 && success4 && success5 && success6;
+        } else {
+            logDebug(@"%@ found LS data. not migrating", TAG);
+            success = NO;
+        }
     }
     
     logDebug(@"%@ end migrateLocalStorage() with success: %@", TAG, success ? @"YES": @"NO");
