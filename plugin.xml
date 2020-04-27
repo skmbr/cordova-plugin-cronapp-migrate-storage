@@ -19,7 +19,14 @@
         <header-file src="src/ios/MigrateStorage.h" />
         <source-file src="src/ios/MigrateStorage.m" />
 
-        <framework src="FMDB" type="podspec" spec="~> 2.7.4" />
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git"/>
+            </config>
+            <pods use-frameworks="true">
+                <pod name="FMDB" spec="~> 2.7.4" />
+            </pods>
+        </podspec>
     </platform>
 
     <platform name="android">
