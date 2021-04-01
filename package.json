@@ -1,6 +1,7 @@
 {
   "name": "cordova-plugin-cronapp-migrate-storage",
   "version": "1.0.0",
+  "license": "ISC",
   "cordova": {
     "id": "cordova-plugin-cronapp-migrate-storage",
     "platforms": [
@@ -13,6 +14,27 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["ecosystem:cordova", "cordova", "cordova-plugin", "cordova-ios", "cordova-android", "ios", "android", "uiwebview", "wkwebview", "websql", "localstorage", "indexeddb"],
-  "author": "Pointman Dev <dev@pointman.com>"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CronApp/cordova-plugin-cronapp-migrate-storage"
+  },
+  "bugs": {
+    "url": "https://github.com/CronApp/cordova-plugin-cronapp-migrate-storage/issues"
+  },
+  "homepage": "https://github.com/CronApp/cordova-plugin-cronapp-migrate-storage#readme",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova",
+    "cordova-plugin",
+    "cordova-ios",
+    "cordova-android",
+    "ios",
+    "android",
+    "uiwebview",
+    "wkwebview",
+    "websql",
+    "localstorage",
+    "indexeddb, cronapp"
+  ],
+  "author": "Lincoln Minto <lincoln.minto@cronapp.io>"
 }
