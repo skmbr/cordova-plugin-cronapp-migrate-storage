@@ -1,8 +1,8 @@
 {
-  "name": "cordova-plugin-ionic-migrate-storage",
-  "version": "0.1.6",
+  "name": "cordova-plugin-cronapp-migrate-storage",
+  "version": "1.0.0",
   "cordova": {
-    "id": "cordova-plugin-ionic-migrate-storage",
+    "id": "cordova-plugin-cronapp-migrate-storage",
     "platforms": [
       "ios",
       "android"
