@@ -56,5 +56,3 @@ Most of the code in this plugin was either adapted or inspired from a plethora o
 
 * Pull out debug flags to make them platform specific and not rely on booleans in the code.
 * Add some unit testing.
-* Open source stuff - github issue templates, CONTRIBUTING doc, Local development doc etc.
-* Publish this to `npm`.
