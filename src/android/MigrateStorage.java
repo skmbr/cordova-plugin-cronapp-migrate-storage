@@ -96,7 +96,14 @@ public class MigrateStorage extends CordovaPlugin {
     }
 
     private String getLocalStorageRootPath() {
-        return this.getWebViewRootPath() + this.getWebviewLocalStoragePath();
+        File localStorage = new File(this.getWebViewRootPath() + this.getWebviewLocalStoragePath());
+        File localStorageDefault = new File(this.getWebViewRootPath() + "/Default" + this.getWebviewLocalStoragePath());
+
+        if(localStorage.exists()){
+          return localStorage.getAbsolutePath();
+        } else {
+          return localStorageDefault.getAbsolutePath();
+        }
     }
 
     private String getWebSQLDatabasesPath() {
