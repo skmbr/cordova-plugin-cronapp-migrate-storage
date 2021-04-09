@@ -1,8 +1,6 @@
 # `cordova-plugin-cronapp-migrate-storage`
 
-> Cordova plugin that migrates WebSQL, localStorage and IndexedDB* data when you start using the `cordova-plugin-ionic-webview` plugin. This works for both Android and iOS!
-
-_* Only on iOS_
+> Cordova plugin that migrates WebSQL and localStorage data when you start using the `cordova-plugin-ionic-webview` plugin. This works only for Android!
 
 ## Installation
 
