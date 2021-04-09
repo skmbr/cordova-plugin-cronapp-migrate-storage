@@ -30,7 +30,6 @@
     "cordova-android",
     "ios",
     "android",
-    "uiwebview",
     "wkwebview",
     "websql",
     "localstorage",
