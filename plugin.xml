@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
-    xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-cronapp-migrate-storage" version="1.0.2">
+    xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-cronapp-migrate-storage" version="1.2.0">
     <name>cordova-plugin-cronapp-migrate-storage</name>
     <description>
         Cordova plugin that migrates WebSQL, localStorage data when you start using the `cordova-plugin-ionic-webview` plugin.
