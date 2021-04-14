@@ -1,8 +1,8 @@
 repositories {
     maven {
-        url 'https://dl.bintray.com/jacek-marchwicki/maven/'
+        url "https://jitpack.io"
     }
 }
 dependencies {
-    compile 'com.appunite:lib-leveldb-jni:0.0.7'
+    compile 'com.github.lincolnminto:leveldb-jni:0.0.8'
 }
