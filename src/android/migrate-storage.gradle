@@ -3,6 +3,13 @@ repositories {
         url "https://jitpack.io"
     }
 }
+
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 dependencies {
-    compile 'com.github.lincolnminto:leveldb-jni:0.0.8'
+    implementation 'com.github.jacek-marchwicki:leveldb-jni:master-SNAPSHOT'
 }
