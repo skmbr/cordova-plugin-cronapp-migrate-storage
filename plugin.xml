@@ -20,5 +20,12 @@
         <framework src="src/android/migrate-storage.gradle" custom="true" type="gradleReference"/>
 
         <source-file src="src/android/MigrateStorage.java" target-dir="src/com/migrate/android" />
+
+        <source-file src="src/android/KeyNotFoundException.java" target-dir="src/com/migrate/android" />
+        <source-file src="src/android/LevelDB.java" target-dir="src/com/migrate/android" />
+        <source-file src="src/android/LevelDBException.java" target-dir="src/com/migrate/android" />
+        <source-file src="src/android/LevelIterator.java" target-dir="src/com/migrate/android" />
+        <source-file src="src/android/Utils.java" target-dir="src/com/migrate/android" />
+        <source-file src="src/android/WriteBatch.java" target-dir="src/com/migrate/android" />
     </platform>
 </plugin>

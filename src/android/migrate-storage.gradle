@@ -1,15 +1,9 @@
-repositories {
-    maven {
-        url "https://jitpack.io"
-    }
-}
-
 allprojects {
     repositories {
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
     }
 }
 
 dependencies {
-    implementation 'com.github.jacek-marchwicki:leveldb-jni:master-SNAPSHOT'
+    implementation 'com.android.support:support-annotations:24.2.0'
 }

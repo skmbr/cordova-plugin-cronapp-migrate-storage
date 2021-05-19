@@ -6,10 +6,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.appunite.leveldb.LevelDB;
-import com.appunite.leveldb.LevelIterator;
-import com.appunite.leveldb.Utils;
-import com.appunite.leveldb.WriteBatch;
+import com.migrate.android.*;
 
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
