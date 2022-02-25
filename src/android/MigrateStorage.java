@@ -72,14 +72,14 @@ public class MigrateStorage extends CordovaPlugin {
     }
 
     private String getLocalHostProtocolDirName() {
-        return "http_localhost_" + this.portNumber;
+        return "https_localhost_" + this.portNumber;
     }
 
     private String getLocalHostProtocol() {
         if (this.portNumber != "0") {
-            return "http://localhost:" + this.portNumber;
+            return "https://localhost:" + this.portNumber;
         } else {
-            return "http://localhost";
+            return "https://localhost";
         }
     }
 
@@ -112,7 +112,7 @@ public class MigrateStorage extends CordovaPlugin {
     }
 
     /**
-     * Migrate localStorage from `file://` to `http://localhost:{portNumber}`
+     * Migrate localStorage from `file://` to `https://localhost:{portNumber}`
      *
      * TODO Test if we can we remove old file:// keys?
      *
